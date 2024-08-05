@@ -21,6 +21,9 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Aetherfall")
 clock = pygame.time.Clock()
 
+loaded = False
+floorLevel = 350
+level = 0
 xPos, yPos = 20, 350
 gravity = 0.6
 jumpHeight = 10
@@ -50,7 +53,7 @@ while running:
     if jumping:
         yPos -= yVelocity
         yVelocity -= gravity
-        if yVelocity < -jumpHeight and yPos > 350:
+        if yPos > floorLevel:
             jumping = False
             yVelocity = jumpHeight
     if keys_pressed[pygame.K_d]:
@@ -60,14 +63,37 @@ while running:
         xPos -= speed
         playerSprite = pygame.transform.flip(noFlipSprite, 1, 0)
 
-    # sidescrolling
-    if xPos > 350:
-        screenPos -= speed
-        xPos -= speed
-    if xPos < 50:
-        screenPos += speed
-        xPos += speed
 
+    # level specific
+    if level == 0:
+        if xPos > 350:
+            screenPos -= speed
+            xPos -= speed
+        if xPos < 50:
+            screenPos += speed
+            xPos += speed
+        if screenPos > 0:
+            screenPos = 0
+        if screenPos < -3050:
+            level = 1
+            print("YIPPEE")
+    if level == 1:
+        if loaded == False:
+            screenPos = 0
+            while WIDTH < 700:
+                WIDTH += 2
+                screen = pygame.display.set_mode((WIDTH, HEIGHT))
+            bg = pygame.image.load("level1.png")
+            xPos = 50
+            yPos = 330
+            floorLevel = 330
+            loaded = True
+        if (xPos > 140 and xPos < 240) or (xPos > 410 and xPos < 510):
+            floorLevel = 600
+        else: floorLevel = 330
+        # if xPos > 650 and yPos < 270:
+            
+    print(xPos)
     # draw sprites 'n stuff!!
     screen.blit(bg, (screenPos,0)) # background
     screen.blit(playerSprite, (xPos,yPos)) # player

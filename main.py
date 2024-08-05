@@ -14,13 +14,16 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
+GREY = (100,100,100)
 
 pygame.init()
-pygame.mixer.init()  ## For sound
+pygame.mixer.init()
+pygame.font.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Aetherfall")
 clock = pygame.time.Clock()
 
+isText = True
 loaded = False
 floorLevel = 350
 level = 0
@@ -31,6 +34,9 @@ yVelocity = jumpHeight
 jumping = False
 speed = 6
 screenPos = 0
+font = pygame.font.SysFont('Courier', 15)
+currentText = font.render(" ", False, BLACK)
+falling = False
 
 bg = pygame.image.load("mapBg.png")
 bg = pygame.transform.scale(bg,(4000,400))
@@ -66,6 +72,7 @@ while running:
 
     # level specific
     if level == 0:
+        isText = True
         if xPos > 350:
             screenPos -= speed
             xPos -= speed
@@ -76,9 +83,20 @@ while running:
             screenPos = 0
         if screenPos < -3050:
             level = 1
-            print("YIPPEE")
+        if screenPos < -2100:
+            currentText = font.render('HELP US. . .', False, WHITE)
+        elif screenPos <  -1300:
+            currentText = font.render("Our sun died out, and everything with it", False, WHITE)
+        elif screenPos < -500:
+            currentText = font.render("Then the withering happened", False, WHITE)
+        elif screenPos < 500:
+            currentText = font.render("This place used to be beautiful", False, WHITE)
+
+    print(yPos)
+
     if level == 1:
         if loaded == False:
+            isText = False
             screenPos = 0
             while WIDTH < 700:
                 WIDTH += 2
@@ -90,13 +108,29 @@ while running:
             loaded = True
         if (xPos > 140 and xPos < 240) or (xPos > 410 and xPos < 510):
             floorLevel = 600
-        else: floorLevel = 330
-        # if xPos > 650 and yPos < 270:
+            if jumping == False:
+                yVelocity = 0
+                jumping = True
+        else:
+            if yPos > 200: 
+                floorLevel = 330
+            elif yPos < 200:
+                floorLevel = 150
+        if yPos > 364:
+            xPos, yPos = 50, 330
+        if xPos > 650 and yPos > 200:
+            floorLevel = 150
+            yPos = 150
+        if xPos > 600:
+            yPos = 130
+            floorLevel = 130
             
-    print(xPos)
     # draw sprites 'n stuff!!
     screen.blit(bg, (screenPos,0)) # background
     screen.blit(playerSprite, (xPos,yPos)) # player
+    if isText == True:
+        pygame.draw.rect(screen, GREY, pygame.Rect(0, 0, 500, 60)) # textbox
+        screen.blit(currentText, (25,25)) # text
 
     pygame.display.flip()       
 

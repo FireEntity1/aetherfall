@@ -25,7 +25,7 @@ clock = pygame.time.Clock()
 isText = True
 loaded = False
 floorLevel = 350
-level = 3
+level = 5
 xPos, yPos = 20, 350
 
 hasStone = False
@@ -43,7 +43,6 @@ def move(x,y):
     global xPos
     global yPos
     xPos, yPos = x, y
-
 def limit(min,max):
     global xPos
     global yPos
@@ -51,7 +50,6 @@ def limit(min,max):
         xPos = min
     if xPos > max:
         xPos = max
-
 bg = pygame.image.load("mapBg.png")
 bg = pygame.transform.scale(bg,(4000,400))
 
@@ -211,11 +209,13 @@ while running:
         if loaded == False:
             while WIDTH > 300:
                 WIDTH -= 4
+                screen = pygame.display.set_mode((WIDTH, HEIGHT))
             while HEIGHT > 300:
                 HEIGHT -= 4
                 screen = pygame.display.set_mode((WIDTH, HEIGHT))
             move(50,250)
             bg = pygame.image.load("level4.png")
+            screen.blit(bg, (screenPos,0))
             floorLevel = 250
             loaded = True
             time.sleep(0.2)
@@ -243,14 +243,50 @@ while running:
                 cutsceneIndex += 1
             case 5:
                 currentText = font.render("I believe in you", False, WHITE)
-            
+        if xPos > 300:
+            level = 5
+            loaded = False
+    if level == 5:
+        floor = 0
+        if loaded == False:
+            while HEIGHT < 700:
+                HEIGHT += 4
+                screen = pygame.display.set_mode((WIDTH, HEIGHT))
+            while WIDTH > 300:
+                WIDTH -= 4
+                screen = pygame.display.set_mode((WIDTH, HEIGHT))
+            currentText = font.render("If I can get up there..", False, WHITE)
+            move(50, 658)
+            bg = pygame.image.load("level5.png")
+            floorLevel = 655
+            loaded = True
+        if 70 < xPos < 200:
+            if yPos > (floorLevel):
+                move(5, floorLevel)
+        else:
+            if yPos < 500:
+                floorLevel = 480
+    
+        if xPos > 260:
+            if yPos > 650:
+                floorLevel = 480
+                move(5,floorLevel)
+                currentText = font.render("I'll be able to save this place!", False, WHITE)
+            else:
+                level = 6
+    
     # draw sprites 'n stuff!!
     screen.blit(bg, (screenPos,0)) # background
     screen.blit(playerSprite, (xPos,yPos)) # player
     if isText == True:
-        pygame.draw.rect(screen, GREY, pygame.Rect(0, 0, 1000, 60)) # textbox
-        screen.blit(currentText, (25,25)) # text
+        if level != 5:
+            pygame.draw.rect(screen, GREY, pygame.Rect(0, 0, 1000, 60)) # textbox
+            screen.blit(currentText, (5,25)) # text
+        elif level == 5:
+            pygame.draw.rect(screen, GREY, pygame.Rect(0, 200, 1000, 60)) # textbox lower
+            screen.blit(currentText, (5,225)) # text lower
 
+    print(yPos)
     pygame.display.flip()
 
 pygame.quit()

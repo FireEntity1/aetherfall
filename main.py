@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import pygame
 import random
 import math
@@ -26,8 +24,9 @@ clock = pygame.time.Clock()
 isText = True
 loaded = False
 floorLevel = 350
-level = 0
+level = 1
 xPos, yPos = 20, 350
+
 gravity = 0.6
 jumpHeight = 10
 yVelocity = jumpHeight
@@ -37,6 +36,19 @@ screenPos = 0
 font = pygame.font.SysFont('Courier', 15)
 currentText = font.render(" ", False, BLACK)
 falling = False
+
+def move(x,y):
+    global xPos
+    global yPos
+    xPos, yPos = x, y
+
+def limit(min,max):
+    global xPos
+    global yPos
+    if xPos < min:
+        xPos = min
+    if xPos > max:
+        xPos = max
 
 bg = pygame.image.load("mapBg.png")
 bg = pygame.transform.scale(bg,(4000,400))
@@ -92,8 +104,6 @@ while running:
         elif screenPos < 500:
             currentText = font.render("This place used to be beautiful", False, WHITE)
 
-    print(yPos)
-
     if level == 1:
         if loaded == False:
             isText = False
@@ -105,6 +115,8 @@ while running:
             xPos = 50
             yPos = 330
             floorLevel = 330
+            isText = True
+            currentText = font.render("I need to re-light the sun", False, WHITE)
             loaded = True
         if (xPos > 140 and xPos < 240) or (xPos > 410 and xPos < 510):
             floorLevel = 600
@@ -122,16 +134,58 @@ while running:
             floorLevel = 150
             yPos = 150
         if xPos > 600:
-            yPos = 130
+            yVelocity = 0
+            yPos = 150
             floorLevel = 130
-            
+        if xPos < 10 and yPos < 200:
+            level = 2
+            loaded = False
+        limit(0,700)
+    if level == 2:
+        if loaded == False:
+            isText = True
+            while WIDTH < 1000:
+                WIDTH += 2
+                screen = pygame.display.set_mode((WIDTH, HEIGHT))
+            while HEIGHT > 200:
+                HEIGHT -= 2
+                screen = pygame.display.set_mode((WIDTH, HEIGHT))
+            xPos = 50
+            yPos = 150
+            bg = pygame.image.load("level2.png")
+            currentText = font.render("But how...", False, WHITE)
+            loaded = True
+            floorLevel = 150
+        if (120 < xPos < 200) or (330 < xPos < 420) or (590 < xPos < 670) or (770 < xPos < 850):
+            if jumping == False:
+                yVelocity = 0
+                jumping = True
+                floorLevel = 600
+                if yPos > 150:
+                    move(50,150)
+        else: floorLevel = 150
+        limit(0,1000)
+        if xPos > 990:
+            level = 3
+            loaded = False
+    if level == 3:
+        if loaded == False:
+            isText = True
+            while WIDTH > 600:
+                WIDTH -= 3
+                screen = pygame.display.set_mode((WIDTH, HEIGHT))
+            while HEIGHT < 300:
+                HEIGHT += 2
+                screen = pygame.display.set_mode((WIDTH, HEIGHT))
+            loaded = True
+
     # draw sprites 'n stuff!!
     screen.blit(bg, (screenPos,0)) # background
     screen.blit(playerSprite, (xPos,yPos)) # player
     if isText == True:
-        pygame.draw.rect(screen, GREY, pygame.Rect(0, 0, 500, 60)) # textbox
+        pygame.draw.rect(screen, GREY, pygame.Rect(0, 0, 1000, 60)) # textbox
         screen.blit(currentText, (25,25)) # text
 
-    pygame.display.flip()       
+    pygame.display.flip()
 
 pygame.quit()

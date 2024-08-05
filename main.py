@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+import time
 
 
 WIDTH = 400
@@ -24,9 +25,10 @@ clock = pygame.time.Clock()
 isText = True
 loaded = False
 floorLevel = 350
-level = 1
+level = 3
 xPos, yPos = 20, 350
 
+hasStone = False
 gravity = 0.6
 jumpHeight = 10
 yVelocity = jumpHeight
@@ -103,13 +105,12 @@ while running:
             currentText = font.render("Then the withering happened", False, WHITE)
         elif screenPos < 500:
             currentText = font.render("This place used to be beautiful", False, WHITE)
-
     if level == 1:
         if loaded == False:
             isText = False
             screenPos = 0
             while WIDTH < 700:
-                WIDTH += 2
+                WIDTH += 4
                 screen = pygame.display.set_mode((WIDTH, HEIGHT))
             bg = pygame.image.load("level1.png")
             xPos = 50
@@ -145,10 +146,10 @@ while running:
         if loaded == False:
             isText = True
             while WIDTH < 1000:
-                WIDTH += 2
+                WIDTH += 4
                 screen = pygame.display.set_mode((WIDTH, HEIGHT))
             while HEIGHT > 200:
-                HEIGHT -= 2
+                HEIGHT -= 4
                 screen = pygame.display.set_mode((WIDTH, HEIGHT))
             xPos = 50
             yPos = 150
@@ -172,13 +173,77 @@ while running:
         if loaded == False:
             isText = True
             while WIDTH > 600:
-                WIDTH -= 3
+                WIDTH -= 4
                 screen = pygame.display.set_mode((WIDTH, HEIGHT))
             while HEIGHT < 300:
-                HEIGHT += 2
+                HEIGHT += 4
                 screen = pygame.display.set_mode((WIDTH, HEIGHT))
+            screen = pygame.display.set_mode((600, 300))
+            bg = pygame.image.load("level3.png")
+            currentText = font.render("Oh! A sign!", False, WHITE)
+            move(50,250)
+            floorLevel = 250
             loaded = True
-
+        if xPos > 206 and yPos > 245:
+            move(50,250)
+        elif 260 < xPos < 480 and yPos < 194:
+            floorLevel = 194
+            if jumping == False:
+                yVelocity = 0
+                jumping = True
+            currentText = font.render("You must relight the sun's core with. . .", False, WHITE)
+        elif 530 < xPos and yPos > 150:
+            floorLevel = 150
+            currentText = font.render("The rest was faded.", False, WHITE)
+            if jumping == False:
+                yVelocity = 0
+                jumping = True
+        elif xPos < 206:
+            floorLevel = 250
+            ccurrentText = font.render("Oh! A sign!", False, WHITE)
+        else: floorLevel = 600
+        
+        if xPos > 600:
+            level = 4
+            loaded = False
+        limit(0, 601)
+    if level == 4:
+        if loaded == False:
+            while WIDTH > 300:
+                WIDTH -= 4
+            while HEIGHT > 300:
+                HEIGHT -= 4
+                screen = pygame.display.set_mode((WIDTH, HEIGHT))
+            move(50,250)
+            bg = pygame.image.load("level4.png")
+            floorLevel = 250
+            loaded = True
+            time.sleep(0.2)
+            cutsceneIndex = 0
+        match cutsceneIndex:
+            case 0:
+                currentText = font.render("Hello.", False, WHITE)
+                time.sleep(3)
+                cutsceneIndex += 1
+            case 1:
+                currentText = font.render("In order to get to the sun...", False, WHITE)
+                time.sleep(3)
+                cutsceneIndex += 1
+            case 2:
+                currentText = font.render("You must make your way...", False, WHITE)
+                time.sleep(3)
+                cutsceneIndex += 1
+            case 3:
+                currentText = font.render("To the core", False, WHITE)
+                time.sleep(3)
+                cutsceneIndex += 1
+            case 4:
+                currentText = font.render("And use the Sunstone", False, WHITE)
+                time.sleep(4)
+                cutsceneIndex += 1
+            case 5:
+                currentText = font.render("I believe in you", False, WHITE)
+            
     # draw sprites 'n stuff!!
     screen.blit(bg, (screenPos,0)) # background
     screen.blit(playerSprite, (xPos,yPos)) # player

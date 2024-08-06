@@ -25,7 +25,7 @@ clock = pygame.time.Clock()
 isText = True
 loaded = False
 floorLevel = 350
-level = 5
+level = 6
 xPos, yPos = 20, 350
 
 hasStone = False
@@ -274,7 +274,46 @@ while running:
                 currentText = font.render("I'll be able to save this place!", False, WHITE)
             else:
                 level = 6
-    
+                loaded = False
+    if level == 6:
+        if loaded == False:
+            while HEIGHT > 600:
+                HEIGHT -= 4
+                screen = pygame.display.set_mode((WIDTH, HEIGHT))
+            while WIDTH < 800:
+                WIDTH += 4
+                screen = pygame.display.set_mode((WIDTH, HEIGHT))
+            screen = pygame.display.set_mode((800, 600))
+            bg = pygame.image.load("level6.png")
+            floorLevel = 525
+            move(5,525)
+            currentText = font.render("The sunstone! I can feel it!", False, WHITE)
+            loaded = True
+        if (130 < xPos < 240) or (330 < xPos < 430) or (530 < xPos < 630):
+            floorLevel = 800
+            if yPos < 350 and jumping == False:
+                yVelocity = 0
+                jumping = True
+            if yPos >= (floorLevel - 30) and jumping == False:
+                yVelocity = 0
+                jumping = True
+            if yPos > 525 - 5:
+                move(5,525)
+        else:
+            if yPos > 300:
+                floorLevel = 525
+            else:
+                floorLevel = 250
+        if xPos > 775:
+            if yPos > 300:
+                floorLevel = 250
+                move(5,275)
+                currentText = font.render("Just.. a little.. further..", False, WHITE)
+            elif yPos < 300:
+                level = 7
+
+        
+
     # draw sprites 'n stuff!!
     screen.blit(bg, (screenPos,0)) # background
     screen.blit(playerSprite, (xPos,yPos)) # player
@@ -286,7 +325,7 @@ while running:
             pygame.draw.rect(screen, GREY, pygame.Rect(0, 200, 1000, 60)) # textbox lower
             screen.blit(currentText, (5,225)) # text lower
 
-    print(yPos)
+    print(xPos)
     pygame.display.flip()
 
 pygame.quit()

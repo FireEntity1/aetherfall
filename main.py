@@ -311,6 +311,14 @@ while running:
                 currentText = font.render("Just.. a little.. further..", False, WHITE)
             elif yPos < 300:
                 level = 7
+                loaded = False
+        if level == 7:
+            if loaded = False
+                while WIDTH > 600:
+                    WIDTH -= 4
+                    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+                
+
 
         
 

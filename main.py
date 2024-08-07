@@ -25,7 +25,7 @@ clock = pygame.time.Clock()
 isText = True
 loaded = False
 floorLevel = 350
-level = 6
+level = 5
 xPos, yPos = 20, 350
 
 hasStone = False
@@ -43,6 +43,7 @@ def move(x,y):
     global xPos
     global yPos
     xPos, yPos = x, y
+
 def limit(min,max):
     global xPos
     global yPos
@@ -50,12 +51,15 @@ def limit(min,max):
         xPos = min
     if xPos > max:
         xPos = max
+
 bg = pygame.image.load("mapBg.png")
 bg = pygame.transform.scale(bg,(4000,400))
 
 playerSprite = pygame.image.load("player.png")
 noFlipSprite = pygame.transform.scale(playerSprite,(32,32))
 playerSprite = noFlipSprite
+
+pygame.display.set_icon(noFlipSprite)
 
 running = True
 while running:
@@ -140,6 +144,7 @@ while running:
             level = 2
             loaded = False
         limit(0,700)
+
     if level == 2:
         if loaded == False:
             isText = True
@@ -167,6 +172,7 @@ while running:
         if xPos > 990:
             level = 3
             loaded = False
+
     if level == 3:
         if loaded == False:
             isText = True
@@ -205,6 +211,7 @@ while running:
             level = 4
             loaded = False
         limit(0, 601)
+
     if level == 4:
         if loaded == False:
             while WIDTH > 300:
@@ -246,6 +253,7 @@ while running:
         if xPos > 300:
             level = 5
             loaded = False
+
     if level == 5:
         floor = 0
         if loaded == False:
@@ -275,6 +283,7 @@ while running:
             else:
                 level = 6
                 loaded = False
+
     if level == 6:
         if loaded == False:
             while HEIGHT > 600:
@@ -312,6 +321,7 @@ while running:
             elif yPos < 300:
                 level = 7
                 loaded = False
+
         if level == 7:
             if loaded == False:
                 while HEIGHT > 600:
@@ -324,16 +334,63 @@ while running:
                 bg = pygame.image.load("level7.png")
                 move(5,525)
                 currentText = font.render("Found it!!", False, WHITE)
+                screen.blit(bg, (screenPos,0)) # background
+                screen.blit(playerSprite, (xPos,yPos)) # player
+                pygame.draw.rect(screen, GREY, pygame.Rect(0, 0, 1000, 60)) # textbox
+                screen.blit(currentText, (5,25)) # text
+                pygame.display.flip()
                 time.sleep(4)
-                move(500,525)
+
                 currentText = font.render("Now all I have to do is get this to the sun!", False, WHITE)
+                screen.blit(bg, (screenPos,0)) # background
+                screen.blit(playerSprite, (xPos,yPos)) # player
+                pygame.draw.rect(screen, GREY, pygame.Rect(0, 0, 1000, 60)) # textbox
+                screen.blit(currentText, (5,25)) # text
+                pygame.display.flip()
+                move(500,525)
                 time.sleep(4)
                 level = 8
+
         if level == 8:
-            if loaded == False :
+            if loaded == False:
                 bg = pygame.image.load("sun1.png")
-                floorLevel = 430
-                move(5,430)
+                floorLevel = 450
+                move(5,450)
+                screen.blit(bg, (screenPos,0)) # background
+                screen.blit(playerSprite, (xPos,yPos)) # player
+                pygame.draw.rect(screen, GREY, pygame.Rect(0, 0, 1000, 60)) # textbox
+                screen.blit(currentText, (5,25)) # text
+                pygame.display.flip()
+                
+                time.sleep(4)
+                move(525,450)
+                currentText = font.render("So, close...", False, WHITE)
+                screen.blit(bg, (screenPos,0)) # background
+                screen.blit(playerSprite, (xPos,yPos)) # player
+                pygame.draw.rect(screen, GREY, pygame.Rect(0, 0, 1000, 60)) # textbox
+                screen.blit(currentText, (5,25)) # text
+                pygame.display.flip()
+
+                time.sleep(4)
+                bg = pygame.image.load("sun2.png")
+                move(250,450)
+                currentText = font.render("DONE!!", False, WHITE)
+                screen.blit(bg, (screenPos,0)) # background
+                screen.blit(playerSprite, (xPos,yPos)) # player
+                pygame.draw.rect(screen, GREY, pygame.Rect(0, 0, 1000, 60)) # textbox
+                screen.blit(currentText, (5,25)) # text
+                pygame.display.flip()
+
+                time.sleep(4)
+
+                bg=pygame.image.load("black.png")
+                currentText = font.render("THE END.", False, WHITE)
+                while WIDTH > 2:
+                    WIDTH -= 2
+                    HEIGHT -= 2
+                    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+                    if WIDTH < 20:
+                        pygame.quit()
 
     # screen update
     screen.blit(bg, (screenPos,0)) # background

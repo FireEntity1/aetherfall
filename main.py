@@ -198,7 +198,7 @@ while running:
                 jumping = True
         elif xPos < 206:
             floorLevel = 250
-            ccurrentText = font.render("Oh! A sign!", False, WHITE)
+            currentText = font.render("Oh! A sign!", False, WHITE)
         else: floorLevel = 600
         
         if xPos > 600:
@@ -313,16 +313,29 @@ while running:
                 level = 7
                 loaded = False
         if level == 7:
-            if loaded = False
-                while WIDTH > 600:
-                    WIDTH -= 4
+            if loaded == False:
+                while HEIGHT > 600:
+                    HEIGHT -= 4
                     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-                
+                while WIDTH < 600:
+                    WIDTH += 4
+                    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+                screen = pygame.display.set_mode((600, 600))
+                bg = pygame.image.load("level7.png")
+                move(5,525)
+                currentText = font.render("Found it!!", False, WHITE)
+                time.sleep(4)
+                move(500,525)
+                currentText = font.render("Now all I have to do is get this to the sun!", False, WHITE)
+                time.sleep(4)
+                level = 8
+        if level == 8:
+            if loaded == False :
+                bg = pygame.image.load("sun1.png")
+                floorLevel = 430
+                move(5,430)
 
-
-        
-
-    # draw sprites 'n stuff!!
+    # screen update
     screen.blit(bg, (screenPos,0)) # background
     screen.blit(playerSprite, (xPos,yPos)) # player
     if isText == True:
@@ -332,8 +345,6 @@ while running:
         elif level == 5:
             pygame.draw.rect(screen, GREY, pygame.Rect(0, 200, 1000, 60)) # textbox lower
             screen.blit(currentText, (5,225)) # text lower
-
-    print(xPos)
     pygame.display.flip()
 
 pygame.quit()

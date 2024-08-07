@@ -25,7 +25,7 @@ clock = pygame.time.Clock()
 isText = True
 loaded = False
 floorLevel = 350
-level = 5
+level = 0
 xPos, yPos = 20, 350
 
 hasStone = False
